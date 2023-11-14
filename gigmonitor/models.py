@@ -9,3 +9,15 @@ class Artist(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Event(models.Model):
+    title = models.CharField(max_length=200)
+    location = models.CharField(max_length=200)
+    date = models.DateTimeField()
+    artists = models.ManyToManyField(Artist)
+
+    def __str__(self):
+        return self.title
+
+
