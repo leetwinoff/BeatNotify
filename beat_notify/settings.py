@@ -41,9 +41,21 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "rest_framework",
+    "social_django",
     "gigmonitor",
     "user",
 ]
+
+AUTHENTICATION_BACKENDS = (
+    "social_core.backends.spotify.SpotifyOAuth2",
+    "django.contrib.auth.backends.ModelBackend",
+    'user.backends.SpotifyAuthenticationBackend',
+)
+
+SOCIAL_AUTH_SPOTIFY_KEY = os.environ.get("SPOTIFY_CLIENT_ID")
+SOCIAL_AUTH_SPOTIFY_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
+SOCIAL_AUTH_SPOTIFY_SCOPE = ["user-read-email", "user-library-read", "playlist-modify-public"]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -53,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'beat_notify.urls'
@@ -64,6 +77,8 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
@@ -131,3 +146,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "user.User"
 
+SPOTIFY_CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
+SPOTIFY_CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
+SPOTIFY_REDIRECT_URI = os.environ.get("SPOTIFY_REDIRECT_URI")
